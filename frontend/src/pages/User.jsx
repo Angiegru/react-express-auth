@@ -3,9 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import CurrentUserContext from "../contexts/current-user-context";
 import { getUser } from "../adapters/user-adapter";
 import { logUserOut } from "../adapters/auth-adapter";
-import { createMood } from "../adapters/mood-adapter";
+import { getEntries } from "../adapters/journalEntry-adapter";  
 import UpdateUsernameForm from "../components/UpdateUsernameForm";
-
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -14,29 +13,41 @@ export default function UserPage() {
   const [errorText, setErrorText] = useState(null);
   const { id } = useParams();
   const isCurrentUserProfile = currentUser && currentUser.id === Number(id);
+  const [ currentCards, setUserExistingCards ] = useState(null);
+
 
   useEffect(() => {
+    console.log(id)
     const loadUser = async () => {
       const [user, error] = await getUser(id);
       if (error) return setErrorText(error.message);
       setUserProfile(user);
     };
-    
+
     loadUser();
-  }, [id]);
-    
-  
-  useEffect(() => {
-    const createNewMood = async () => {
-      const [mood, error] = await createMood();
+
+    const loadEntries = async () => {
+      const [ entries, error ] = await getEntries(id);
       if (error) return setErrorText(error.message);
-      setUserProfile(mood);
-    }
-    
-    createNewMood();
-    
-  }, [userProfile]);
-  
+      setUserExistingCards(entries);
+    };
+
+    loadEntries();
+}, [id]);
+console.log(currentCards);
+
+  // useEffect(() => {
+  //   console.log(id)
+  //   const loadEntries = async () => {
+  //     const [ entries, error ] = await getEntries(id);
+  //     if (error) return setErrorText(error.message);
+  //     setUserExistingCards(entries);
+  //   };
+
+  //   loadEntries();
+  // }, [id]); //we want to reload everytime the id changes
+
+
   const handleLogout = async () => {
     logUserOut();
     setCurrentUser(null);
@@ -55,12 +66,7 @@ export default function UserPage() {
     <h1>{profileUsername}</h1>
     <h1>hi</h1>
     { !!isCurrentUserProfile && <button onClick={handleLogout}>Log Out</button> }
-
-
-    <h2>Moods</h2>
-    <p>Write a new mood</p>
-    <p></p>
-
+    <p>If the user had any data, here it would be</p>
     <p>Fake Bio or something</p>
     {
       !!isCurrentUserProfile

@@ -18,10 +18,10 @@ Router.post('/login', userController.login);
 Router.delete('/logout', userController.logout);
 Router.get('/me', userController.showMe);
 
-Router.get('/journal_entries', journalEntryController.list);
-Router.post('/journal_entries', journalEntryController.create);
+Router.get('/users/:id/journal_entries', journalEntryController.list);
+Router.post('/users/:id/journal_entries', journalEntryController.create);
 //Router.patch('/journal_entries/:id', journalEntryController.update);
-Router.delete('/journal_entries', journalEntryController.deleted);
+Router.delete('/users/:id/journal_entries', journalEntryController.deleted);
 
 Router.get('/moods', moodsController.list);
 Router.post('/moods', moodsController.create);
