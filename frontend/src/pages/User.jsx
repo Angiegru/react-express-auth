@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import CurrentUserContext from "../contexts/current-user-context";
 import { getUser } from "../adapters/user-adapter";
 import { logUserOut } from "../adapters/auth-adapter";
-import { getEntries } from "../adapters/journalEntry-adapter";  
+import { getEntries } from "../adapters/journalEntry-adapter";
+import { getMoods } from "../adapters/moods-adapter";
 import UpdateUsernameForm from "../components/UpdateUsernameForm";
 
 export default function UserPage() {
@@ -14,6 +15,7 @@ export default function UserPage() {
   const { id } = useParams();
   const isCurrentUserProfile = currentUser && currentUser.id === Number(id);
   const [ currentCards, setUserExistingCards ] = useState(null);
+  const [currentMoods, setUserExistingMoods ] = useState(null);
 
 
   useEffect(() => {
@@ -33,6 +35,14 @@ export default function UserPage() {
     };
 
     loadEntries();
+
+    const loadMoods = async () => {
+      const [ moods, error ] = await getMoods(id);
+      if (error) return setErrorText(error.message);
+      setUserExistingMoods(moods);
+    };
+
+    loadMoods();
 }, [id]);
 console.log(currentCards);
 
