@@ -23,10 +23,10 @@ Router.post('/users/:id/journal_entries', journalEntryController.create);
 //Router.patch('/journal_entries/:id', journalEntryController.update);
 Router.delete('/users/:id/journal_entries', journalEntryController.deleted);
 
-Router.get('/moods', moodsController.list);
-Router.post('/moods', moodsController.create);
+Router.get('/users/:id/moods', moodsController.list);
+Router.post('/users/:id/moods', moodsController.create);
 // Router.patch('/moods/:id', moodsController.update);
-Router.delete('/moods/:id', moodsController.deleted);
+Router.delete('/users/:id/moods', moodsController.deleted);
 
 // These actions require authentication (only valid logged in users can do these things)
 // The checkAuthentication middleware will only run for these specified routes.
